@@ -1,0 +1,23 @@
+{{define "show"}}
+{{template "header"}}
+<main role="main" class="inner cover" >
+    <h1>Характеристики</h1>
+    <p class="lead">
+      <div class="alert alert-danger" >
+        <div class="lefT" style="text-align: left;">
+            <h3>Имя: {{.Name}}</h2>
+            <h3>Тип: {{.Type}}</h3>
+            <h3>Возраст: {{.Birth}}</h3>
+            <h3>Знает команду: {{.Commands}}</h3>
+        </div>
+        <br>
+        <a href="/" class="btn btn-danger">На главную</a>
+      </div>
+
+
+
+      
+    </p>
+</main>
+{{template "footer"}}
+{{end}}

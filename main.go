@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"html/template"
-	
+	"github.com/gorilla/mux"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -14,6 +14,7 @@ import (
 
 
 type Animals struct{
+	Id uint16 `json:"id"`
 	Name string `json:"name"`
 	Type string `json:"type"`
 	Birth uint16 `json:"birth"`
@@ -21,6 +22,8 @@ type Animals struct{
 
 }
 var posts=[]Animals{}
+var showPost=Animals{}
+
 
 	func main(){
 		
@@ -47,14 +50,14 @@ var posts=[]Animals{}
 		   panic(err)
 	    }
 	    defer Db.Close()
-		res, err := Db.Query("Select `name`,`type`,`birth`,`commands` From `animals`")
+		res, err := Db.Query("Select * From `animals`")
 			if err!=nil {
 				panic(err)
 			}
 			posts=[]Animals{}
 			for res.Next(){
 				var animal Animals
-				err = res.Scan(&animal.Name ,&animal.Type, &animal.Birth , &animal.Commands)
+				err = res.Scan(&animal.Id, &animal.Name ,&animal.Type, &animal.Birth , &animal.Commands)
 				if err!=nil {
 					panic(err)
 				}
@@ -73,6 +76,7 @@ var posts=[]Animals{}
 		t.ExecuteTemplate(w,"create",nil)
 	}
 	func save_article( w http.ResponseWriter ,r *http.Request){
+		
 		nameAnimal:=r.FormValue("nameAnim")
 		typeAnimal:=r.FormValue("typeAnim")
 		dateBirth:=r.FormValue("birthAnim")
@@ -91,12 +95,49 @@ var posts=[]Animals{}
 		defer insert.Close()
 		http.Redirect(w,r,"/ ",http.StatusSeeOther)
 	}
+	func show_post( w http.ResponseWriter ,r *http.Request){
+		t, err :=template.ParseFiles("templates/show.html","templates/header.html","templates/footer.html")
+		if err!= nil{
+			fmt.Fprintf(w,err.Error())
+		}
+		vars:=mux.Vars(r)
+		Db, err :=sql.Open("mysql","root:@tcp(127.0.0.1:3306)/animals")
+	    if err!=nil {
+		   panic(err)
+	    }
+	    defer Db.Close()
+		//fmt.Fprintf(w, "ID: %v\n", vars["id"])
+		res, err := Db.Query("Select * From `animals` where `id`=?",vars["id"])
+			if err!=nil {
+				panic(err)
+			}
+		showPost=Animals{}
+		for res.Next(){
+			var animal Animals
+			err = res.Scan(&animal.Id, &animal.Name ,&animal.Type, &animal.Birth , &animal.Commands)
+			if err!=nil {
+				panic(err)
+			}
+				
+			// a:=fmt.Sprintf("Name: %s \n Type: %s \n Age: %d \n Commands: %s \n", animal.Name, animal.Type, animal.Birth, animal.Commands)
+			showPost=animal
+				
+			}
+		t.ExecuteTemplate(w,"show",showPost)
+	}
+
+
+
 	func handleFunc(){
-		
+		rtr:=mux.NewRouter()
+		rtr.HandleFunc("/", index).Methods("GET")
+		rtr.HandleFunc("/create", create).Methods("GET")
+		rtr.HandleFunc("/save_article", save_article).Methods("POST")
+		rtr.HandleFunc("/post/{id:[0-9]+}", show_post).Methods("GET")
+
+		http.Handle("/",rtr)
 		http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-		http.HandleFunc("/", index)
-		http.HandleFunc("/create", create)
-		http.HandleFunc("/save_article", save_article)
+
 		http.ListenAndServe(":8080",nil)
 		
 
