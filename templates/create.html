@@ -1,0 +1,16 @@
+{{define "create"}}
+{{template "header"}}
+<main role="main" class="inner cover" >
+    <h1 class="cover-heading">Форма прикрепления животного</h1>
+    <form action="/save_article" method="post">
+        <input type="text" name="nameAnim" id="nameAnim" class="form-control" placeholder="Введите имя животного"><br>
+        <input type="text" name="typeAnim" id="typeAnim" class="form-control" placeholder="Введите тип животного">
+        <p>(Пример: кошки,собаки,хомяки,лошади,веблюды,ослы)</p>
+        <input type="number" name="birthAnim" id="birthAnim" class="form-control" placeholder="Введите возраст животного"><br>
+        <input type="text" name="commandsAnim" id="commandsAnim" class="form-control" placeholder="Какие команды понимает"><br>
+        <button class="btn btn-warning">Добавить</button>
+        
+    </form>
+</main>
+{{template "footer"}}
+{{end}}
