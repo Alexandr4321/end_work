@@ -1,0 +1,129 @@
+  135  mkdir animals
+
+  136  ls
+
+  137  cd animals
+
+  138  sudo nano Pets
+
+  139  sudo nano Pack
+
+  141  ls
+
+  142  cat Pack Pets > friends
+
+  143  ls
+
+  144  nano friends 
+
+  145  cd
+
+  146  mkdir new_dir
+
+  147  cp animals/friends new_dir/
+
+  148  ls
+
+  149  cd new_dir
+
+  150  ls
+
+  151  nano friends 
+
+
+//  создал базу данных в mysql через linux терминал
+
+// CREATE TABLE IF NOT EXISTS animals 
+// (	
+// 	id INT NOT NULL PRIMARY KEY,
+//     typeAnim VARCHAR(45)
+    
+// );
+// INSERT animals
+// VALUES
+// 	(1, "Домашние"),
+//     (2, "Вьючерные");
+
+
+// CREATE TABLE IF NOT EXISTS typeAnimHome 
+// (	
+// 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+//     typeAnim VARCHAR(45),
+//     animals_id int,
+//     -- commands VARCHAR(45),
+//     -- birds date,
+//     -- animals_id INT,
+//     FOREIGN KEY (animals_id) REFERENCES animals(id)
+// );
+
+// INSERT INTO typeAnimHome(typeAnim, animals_id)
+// VALUES
+// 	("Кошки", 1),
+//     ("Собаки", 1),
+//     ("Хомяки", 1),
+//     ("Лошади", 2),
+//     ("Верблюды", 2),
+//     ("Ослы", 2);
+  
+// CREATE TABLE IF NOT EXISTS pets
+// (	
+// 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+//     name VARCHAR(45),
+//     commands VARCHAR(45),
+//     birds date,
+//     pets_id INT,
+//     FOREIGN KEY (pets_id) REFERENCES typeAnimHome(id)
+// );
+
+// INSERT INTO pets(name,commands,birds,pets_id)
+// VALUES
+// 	("Барсик","Мяукать","2001-02-12", 1),
+//     ("Бобик","Сидеть","2002-02-12", 2),
+//     ("Пуговка","Грызть","2003-02-12", 3),
+//     ("Конь","Бежать","2004-02-12", 4),
+//     ("Горбатый","Ходить","2005-02-12", 5),
+//     ("Упрямый","Тоскать","2006-02-12", 6);
+    
+
+// select  p.name ,t.typeAnim,a.typeAnim, p.commands, p.birds  
+// from typeAnimHome t
+// left join animals a on t.animals_id = a.id
+// left join pets p on t.id= p.pets_id;
+
+
+
+
+
+
+
+
+    mysql> select  p.name ,t.typeAnim,a.typeAnim, p.commands, p.birds  
+
+    -> from typeAnimHome t
+
+    -> left join animals a on t.animals_id = a.id
+
+    -> left join pets p on t.id= p.pets_id;
+
+
++------------------+------------------+--------------------+----------------+------------+
+
+| name             | typeAnim         | typeAnim           | commands       | birds      |
+
++------------------+------------------+--------------------+----------------+------------+
+
+| Барсик           | Кошки            | Домашние           | Мяукать        | 2001-02-12 |
+
+| Бобик            | Собаки           | Домашние           | Сидеть         | 2002-02-12 |
+
+| Пуговка          | Хомяки           | Домашние           | Грызть         | 2003-02-12 |
+
+| Конь             | Лошади           | Вьючерные          | Бежать         | 2004-02-12 |
+
+| Горбатый         | Верблюды         | Вьючерные          | Ходить         | 2005-02-12 |
+
+| Упрямый          | Ослы             | Вьючерные          | Тоскать        | 2006-02-12 |
+
++------------------+------------------+--------------------+----------------+------------+
+
+
